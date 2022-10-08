@@ -8,9 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 import uvicorn
-import os
+import numpy as np
 
 
 # Class - wrapper of FastAPI app
@@ -31,6 +31,8 @@ class MLDeploy:
     # model - a tensorflow or sklearn model with a predict method
     # scaler - a sklearn scaler with a transform method
     def add_model(self, model_name, model=None, scaler=None):
+        # TODO: Add support for many model API - each model should be in a separate app and have its own route
+        # Then, the main app should have a route to each model
 
         # Check if model is not None
         if model is None:
@@ -45,24 +47,34 @@ class MLDeploy:
             raise Exception("Scaler has no transform method")
         
         # If everything is ok create a new class for input and output
-        class Input(BaseModel):
-            input_data: list
+        class InputModel(BaseModel):
+            input_data: List[float]
 
-        class Output(BaseModel):
+        class OutputModel(BaseModel):
             prediction: list
         
         # Create a new route for the model
         @self.app.post("/" + model_name)
-        def predict(input_data: Input):
+        def predict(data: InputModel):
+            # Validate input data
+            if len(data.input_data) == 0:
+                return JSONResponse(status_code=400, content={"error": "Input data is empty"})
+            
+            # Transofrm to numpy array
+            input_data = np.array(data.input_data)
+
+            # Check the shape of the input data           
+            input_data = input_data.reshape(1, -1)
+
             # Transform data
             if scaler is not None:
                 input_data = scaler.transform(input_data)
 
             # Predict
-            prediction = model.predict(input_data)
+            prediction = list(model.predict(input_data))
 
             # Return prediction
-            return JSONResponse(content=jsonable_encoder(Output(prediction=prediction)))
+            return JSONResponse(content=jsonable_encoder(OutputModel(prediction=prediction)))
     
     # Function - run the app
     def run(self):
