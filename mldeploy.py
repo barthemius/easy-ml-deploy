@@ -66,7 +66,9 @@ class MLDeploy:
             input_data = np.array(data.input_data)
 
             # Check the shape of the input data
-            input_data = input_data.reshape(1, -1)
+            # Make it more general - reshape to (1, shape[0], shape[1], ...)
+            new_shape = (1, *input_data.shape)
+            input_data = input_data.reshape(new_shape)
 
             # Transform data
             if scaler is not None:
