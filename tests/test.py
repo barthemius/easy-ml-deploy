@@ -8,7 +8,7 @@ from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import numpy as np
-import mldeploy
+from mldeploy import MLDeploy
 
 # Load data
 boston = load_boston()
