@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "easy-mldeploy"
+version = "0.0.1"
+authors = [
+  { name="Bartlomiej Kiczek", email="bartlomiej.kiczek@gmail.com" },
+]
+description = "A simple utility for deploying machine learning models as REST API using FastAPI."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "fastapi",
+  "uvicorn", 
+  "numpy", 
+  "pydantic"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/barthemius/easy-ml-deploy"
+"Bug Tracker" = "https://github.com/barthemius/easy-ml-deploy/issues"

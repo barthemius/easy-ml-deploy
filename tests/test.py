@@ -48,7 +48,7 @@ print(r2_score(y_test, y_pred))
 
 
 # Deploy model
-deploy = mldeploy.MLDeploy()
+deploy = MLDeploy()
 deploy.add_model("linear_regression", lr, scaler)
 deploy.add_model("svm", svm, scaler)
 deploy.run()
