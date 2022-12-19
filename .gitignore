@@ -1,2 +1,4 @@
 .DS_Store
-__pycache__/mldeploy.cpython-38.pyc
+__pycache__/*
+dist/*
+src/easy_mldeploy.egg-info/*
